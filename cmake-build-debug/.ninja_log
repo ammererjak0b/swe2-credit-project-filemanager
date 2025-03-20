@@ -1,3 +1,7 @@
 # ninja log v6
 6	110	7641854723482633	CMakeFiles/swe2_credit_project_filemanager.dir/main.c.obj	c7775934ab79e093
-111	257	7641854724535852	swe2_credit_project_filemanager.exe	18bacfc0e0002b33
+123	217	7641882726846134	swe2_credit_project_filemanager.exe	1acb55f3ba629c8
+2	254	7641883574446629	build.ninja	91b5150e11895f77
+25	116	7641882725864453	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj	72a9384afd562a49
+21	123	7641882725828647	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj	4ea56ab6f0571cfe
+32	103	7641856405971091	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
