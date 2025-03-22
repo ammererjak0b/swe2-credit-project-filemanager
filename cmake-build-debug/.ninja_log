@@ -1,7 +1,18 @@
 # ninja log v6
 6	110	7641854723482633	CMakeFiles/swe2_credit_project_filemanager.dir/main.c.obj	c7775934ab79e093
-123	217	7641882726846134	swe2_credit_project_filemanager.exe	1acb55f3ba629c8
-2	254	7641883574446629	build.ninja	91b5150e11895f77
-25	116	7641882725864453	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj	72a9384afd562a49
-21	123	7641882725828647	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj	4ea56ab6f0571cfe
-32	103	7641856405971091	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+105	241	7643629285668605	swe2_credit_project_filemanager.exe	ae74b08a868b3fa2
+9	100	7643629284709923	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj	72a9384afd562a49
+2	254	7643651457288395	build.ninja	91b5150e11895f77
+5	105	7643629284665794	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+10	91	7643594864566184	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj	4ea56ab6f0571cfe
+13	103	7643629284745909	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinkedList.c.obj	5ea97cd38a87efe2
+2	308	7643651457288395	build.ninja	91b5150e11895f77
+43	157	7643651458848506	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/Conversation.c.obj	94725c1d29dffa85
+34	159	7643651458772333	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+39	161	7643651458813325	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj	72a9384afd562a49
+162	269	7643651460037993	swe2_credit_project_filemanager.exe	939e18cf5f25d667
+5	74	7643655643944293	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/Conversation.c.obj	94725c1d29dffa85
+75	177	7643655644639684	swe2_credit_project_filemanager.exe	939e18cf5f25d667
+5	104	7643658280485031	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+5	98	7643658557538806	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+98	198	7643658558479966	swe2_credit_project_filemanager.exe	939e18cf5f25d667

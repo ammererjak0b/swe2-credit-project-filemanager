@@ -73,6 +73,12 @@ build CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinke
   OBJECT_DIR = CMakeFiles\swe2_credit_project_filemanager.dir
   OBJECT_FILE_DIR = CMakeFiles\swe2_credit_project_filemanager.dir\src\FileManager
 
+build CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/Conversation.c.obj: C_COMPILER__swe2_credit_project_filemanager_unscanned_Debug C$:/Users/jakob/CLionProjects/swe2-credit-project-filemanager/cmake-build-debug/src/FileManager/Conversation.c || cmake_object_order_depends_target_swe2_credit_project_filemanager
+  DEP_FILE = CMakeFiles\swe2_credit_project_filemanager.dir\src\FileManager\Conversation.c.obj.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\swe2_credit_project_filemanager.dir
+  OBJECT_FILE_DIR = CMakeFiles\swe2_credit_project_filemanager.dir\src\FileManager
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target swe2_credit_project_filemanager
@@ -81,7 +87,7 @@ build CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinke
 #############################################
 # Link the executable swe2_credit_project_filemanager.exe
 
-build swe2_credit_project_filemanager.exe: C_EXECUTABLE_LINKER__swe2_credit_project_filemanager_Debug CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinkedList.c.obj
+build swe2_credit_project_filemanager.exe: C_EXECUTABLE_LINKER__swe2_credit_project_filemanager_Debug CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/BinarySearchTree.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinkedList.c.obj CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/Conversation.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\swe2_credit_project_filemanager.dir

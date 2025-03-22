@@ -5,8 +5,10 @@
 #include "../Include/DoublyLinkedList.h"
 #include <string.h>
 
+#define STACK_MAX 1000
+
 // create new node
-ListNode *CreateNode(const char *fileName, long fileSize) {
+ListNode *CreateListNode(const char *fileName, long fileSize) {
     ListNode *newNode = (ListNode *)malloc(sizeof(ListNode));
     if (!newNode) return NULL;
 
@@ -19,8 +21,8 @@ ListNode *CreateNode(const char *fileName, long fileSize) {
 }
 
 // insert at the beginning
-void InsertFile(ListNode **head, const char *fileName, long fileSize) {
-    ListNode *newNode = CreateNode(fileName, fileSize);
+void InsertFileDll(ListNode **head, const char *fileName, long fileSize) {
+    ListNode *newNode = CreateListNode(fileName, fileSize);
     if (!newNode) return;
 
     if (*head) {
@@ -32,7 +34,7 @@ void InsertFile(ListNode **head, const char *fileName, long fileSize) {
 }
 
 // remove file by name
-bool DeleteFile(ListNode **head, const char *fileName) {
+bool DeleteFileDll(ListNode **head, const char *fileName) {
     if (!*head) return false;
 
     ListNode *temp = *head;

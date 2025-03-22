@@ -5,74 +5,98 @@
  *  Basically implemented CRUD for BinarySearchTree
  */
 
-
 // Create a new node with filename and file size
-BSTNode *CreateNode(const char *fileName, long fileSize) {
-    BSTNode *newNode = (BSTNode *)malloc(sizeof(BSTNode));
-    if (!newNode) return NULL; // Memory allocation check
+BSTNode *CreateBtsNode(const char *fileName, long fileSize) {
+    BSTNode *node = malloc(sizeof(BSTNode));
+    if (!node) return NULL;
 
-    newNode->FileName = strdup(fileName); // Duplicate string to avoid pointer issues
-    newNode->FileSize = fileSize;
-    newNode->Left = newNode->Right = NULL;
+    node->FileName = strdup(fileName);
+    node->Left = node->Right = NULL;
 
-    return newNode;
+    FileEntry *entry = malloc(sizeof(FileEntry));
+    entry->FileSize = fileSize;
+    entry->Next = NULL;
+
+    node->Duplicates = entry;
+    return node;
 }
 
 // Insert a file into BST (sorted by filename)
-BSTNode *InsertFile(BSTNode *root, const char *fileName, long fileSize) {
-    if (!root) return CreateNode(fileName, fileSize); // Insert at empty position
+BSTNode *InsertFileBts(BSTNode *root, const char *fileName, long fileSize) {
+    if (!root) return CreateBtsNode(fileName, fileSize);
 
-    if (strcmp(fileName, root->FileName) < 0)
-        root->Left = InsertFile(root->Left, fileName, fileSize); // Insert left
-    else if (strcmp(fileName, root->FileName) > 0)
-        root->Right = InsertFile(root->Right, fileName, fileSize); // Insert right
+    int cmp = strcmp(fileName, root->FileName);
+    if (cmp < 0)
+        root->Left = InsertFileBts(root->Left, fileName, fileSize);
+    else if (cmp > 0)
+        root->Right = InsertFileBts(root->Right, fileName, fileSize);
+    else {
+        FileEntry *entry = malloc(sizeof(FileEntry));
+        entry->FileSize = fileSize;
+        entry->Next = root->Duplicates;
+        root->Duplicates = entry;
+    }
 
     return root;
 }
-
 // Search for a file by name in BST
-BSTNode *SearchFile(BSTNode *root, const char *fileName) {
-    if (!root || strcmp(fileName, root->FileName) == 0) return root; // Found or empty tree
+BSTNode *SearchFileBts(BSTNode *root, const char *fileName) {
+    if (!root || strcmp(fileName, root->FileName) == 0) {
+        return root;
+    }
 
-    return (strcmp(fileName, root->FileName) < 0) ?
-        SearchFile(root->Left, fileName) :
-        SearchFile(root->Right, fileName);
+    if (strcmp(fileName, root->FileName) < 0) {
+        return SearchFileBts(root->Left, fileName);
+    } else {
+        return SearchFileBts(root->Right, fileName);
+    }
 }
 
 // Find the smallest node in the BST
 BSTNode *FindMinimum(BSTNode *root) {
-    while (root && root->Left) root = root->Left;
+    while (root && root->Left)
+        root = root->Left;
     return root;
 }
 
 // Delete a file node from BST and maintain BST structure
-BSTNode *DeleteFileNode(BSTNode *root, const char *fileName) {
+BSTNode *DeleteFileBtsNode(BSTNode *root, const char *fileName) {
     if (!root) return NULL;
 
-    if (strcmp(fileName, root->FileName) < 0)
-        root->Left = DeleteFileNode(root->Left, fileName); // Search left
-    else if (strcmp(fileName, root->FileName) > 0)
-        root->Right = DeleteFileNode(root->Right, fileName); // Search right
+    int cmp = strcmp(fileName, root->FileName);
+    if (cmp < 0) {
+        root->Left = DeleteFileBtsNode(root->Left, fileName);
+    }
+    else if (cmp > 0) {
+        root->Right = DeleteFileBtsNode(root->Right, fileName);
+    }
     else {
-        // Case 1 & 2: Node has one or no child
-        if (!root->Left) {
-            BSTNode *tempNode = root->Right;
-            free(root->FileName);
-            free(root);
-            return tempNode;
-        } else if (!root->Right) {
-            BSTNode *Temp = root->Left;
-            free(root->FileName);
-            free(root);
-            return Temp;
+        if (root->Duplicates && root->Duplicates->Next) {
+            FileEntry *temp = root->Duplicates;
+            root->Duplicates = temp->Next;
+            free(temp);
+            return root;
         }
 
-        // Case 3: Node has two children -> Replace with min node in right subtree
-        BSTNode *Temp = FindMinimum(root->Right);
+        if (!root->Left) {
+            BSTNode *right = root->Right;
+            free(root->FileName);
+            free(root->Duplicates);
+            free(root);
+            return right;
+        } else if (!root->Right) {
+            BSTNode *left = root->Left;
+            free(root->FileName);
+            free(root->Duplicates);
+            free(root);
+            return left;
+        }
+
+        BSTNode *min = FindMinimum(root->Right);
         free(root->FileName);
-        root->FileName = strdup(Temp->FileName);
-        root->FileSize = Temp->FileSize;
-        root->Right = DeleteFileNode(root->Right, Temp->FileName);
+        root->FileName = strdup(min->FileName);
+        root->Duplicates = min->Duplicates;
+        root->Right = DeleteFileBtsNode(root->Right, min->FileName);
     }
 
     return root;
@@ -80,19 +104,33 @@ BSTNode *DeleteFileNode(BSTNode *root, const char *fileName) {
 
 // Print all file entries in sorted order (inorder traversal)
 void PrintTree(BSTNode *root) {
-    if (root) {
-        PrintTree(root->Left);
-        printf("%s (%ld bytes)\n", root->FileName, root->FileSize);
-        PrintTree(root->Right);
+    if (!root) return;
+
+    PrintTree(root->Left);
+    printf("%s: ", root->FileName);
+    FileEntry *entry = root->Duplicates;
+    while (entry) {
+        printf("%ld ", entry->FileSize);
+        entry = entry->Next;
     }
+    printf("bytes\n");
+    PrintTree(root->Right);
 }
 
 // Free all nodes in the BST (recursive)
 void FreeTree(BSTNode *root) {
-    if (root) {
-        FreeTree(root->Left);
-        FreeTree(root->Right);
-        free(root->FileName);
-        free(root);
+    if (!root) return;
+
+    FreeTree(root->Left);
+    FreeTree(root->Right);
+
+    free(root->FileName);
+    FileEntry *entry = root->Duplicates;
+    while (entry) {
+        FileEntry *next = entry->Next;
+        free(entry);
+        entry = next;
     }
+
+    free(root);
 }

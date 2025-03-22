@@ -8,20 +8,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct FileEntry {
+    long FileSize;
+    struct FileEntry *Next;
+} FileEntry;
+
 // Struct
 typedef struct BSTNode {
     char *FileName;
-    long FileSize;
+    FileEntry *Duplicates;
     struct BSTNode *Left;
     struct BSTNode *Right;
 } BSTNode;
 
 // Functions
-BSTNode *CreateNode(const char *fileName, long fileSize);
-BSTNode *InsertFile(BSTNode *root, const char *fileName, long fileSize);
-BSTNode *SearchFile(BSTNode *root, const char *fileName);
-BSTNode *DeleteFileNode(BSTNode *root, const char *fileName);
+BSTNode *CreateBtsNode(const char *fileName, long fileSize);
+BSTNode *InsertFileBts(BSTNode *root, const char *fileName, long fileSize);
+BSTNode *SearchFileBts(BSTNode *root, const char *fileName);
+BSTNode *DeleteFileBtsNode(BSTNode *root, const char *fileName);
 void PrintTree(BSTNode *root);
 void FreeTree(BSTNode *root);
-
 #endif //BINARYSEARCHTREE_H

@@ -18,12 +18,11 @@ typedef struct ListNode {
 } ListNode;
 
 // Functions
-ListNode *CreateNode(const char *fileName, long fileSize);
-void InsertFile(ListNode **head, const char *fileName, long fileSize);
-bool DeleteFile(ListNode **head, const char *fileName);
+ListNode *CreateListNode(const char *fileName, long fileSize);
+void InsertFileDll(ListNode **head, const char *fileName, long fileSize);
+bool DeleteFileDll(ListNode **head, const char *fileName);
 ListNode *SearchFile(ListNode *head, const char *fileName);
 void PrintList(ListNode *head);
 void PrintListReverse(ListNode *head);
 void FreeList(ListNode **head);
-
 #endif //DOUBLYLINKEDLIST_H
