@@ -62,7 +62,7 @@ void freeDList(DListNode *head) {
 }
 
 // parse csv list to doubly linked lsit
-DListNode *parseCSVToDList(char *fileContent) {
+DListNode *parseCSVToDoublyList(char *fileContent) {
     DListNode *head = NULL;
     char *saveptrLine = NULL;
     // one entry every line

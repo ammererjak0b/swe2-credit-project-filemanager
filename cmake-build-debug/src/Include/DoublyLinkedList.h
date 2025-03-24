@@ -31,5 +31,5 @@ void printDList(DListNode *head);
 void freeDList(DListNode *head);
 
 // Parses the CSV file content (as a string) line by line and inserts the data records into the double-linked list.
-DListNode *parseCSVToDList(char *fileContent);
+DListNode *parseCSVToDoublyList(char *fileContent);
 #endif //DOUBLYLINKEDLIST_H
