@@ -9,20 +9,27 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Struct
-typedef struct ListNode {
-    char *FileName;
-    long FileSize;
-    struct ListNode *Prev;
-    struct ListNode *Next;
-} ListNode;
+// Struct doubly linked list node
+typedef struct DListNode {
+    char *artist;
+    char *album;
+    int year;
+    struct DListNode *prev;
+    struct DListNode *next;
+} DListNode;
 
-// Functions
-ListNode *CreateListNode(const char *fileName, long fileSize);
-void InsertFileDll(ListNode **head, const char *fileName, long fileSize);
-bool DeleteFileDll(ListNode **head, const char *fileName);
-ListNode *SearchFile(ListNode *head, const char *fileName);
-void PrintList(ListNode *head);
-void PrintListReverse(ListNode *head);
-void FreeList(ListNode **head);
+// Creates a new node of the doubly linked list
+DListNode *createDListNode(const char *artist, const char *album, int year);
+
+// Inserts a new node at the end of the list and returns the (possibly new) header
+DListNode *insertDListNode(DListNode *head, const char *artist, const char *album, int year);
+
+// Outputs the contents of the list (from header to end)
+void printDList(DListNode *head);
+
+// Free the memory of the entire list
+void freeDList(DListNode *head);
+
+// Parses the CSV file content (as a string) line by line and inserts the data records into the double-linked list.
+DListNode *parseCSVToDList(char *fileContent);
 #endif //DOUBLYLINKEDLIST_H

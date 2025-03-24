@@ -1,136 +1,113 @@
-#include "../include/BinarySearchTree.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "../include/BinarySearchTree.h"
 
-/*
- *  Basically implemented CRUD for BinarySearchTree
- */
+DuplicateAlbum *createDuplicateAlbum(const char *album, int year) {
+    DuplicateAlbum *dup = malloc(sizeof(DuplicateAlbum));
+    if (!dup) {
+        perror("Malloc failed");
+        exit(EXIT_FAILURE);
+    }
+    dup->album = strdup(album);
+    dup->year = year;
+    dup->next = NULL;
+    return dup;
+}
 
-// Create a new node with filename and file size
-BSTNode *CreateBtsNode(const char *fileName, long fileSize) {
-    BSTNode *node = malloc(sizeof(BSTNode));
-    if (!node) return NULL;
-
-    node->FileName = strdup(fileName);
-    node->Left = node->Right = NULL;
-
-    FileEntry *entry = malloc(sizeof(FileEntry));
-    entry->FileSize = fileSize;
-    entry->Next = NULL;
-
-    node->Duplicates = entry;
+AlbumNode *createAlbumNode(const char *artist, const char *album, int year) {
+    AlbumNode *node = malloc(sizeof(AlbumNode));
+    if (!node) {
+        perror("Malloc failed");
+        exit(EXIT_FAILURE);
+    }
+    node->artist = strdup(artist);
+    node->album = strdup(album);
+    node->year = year;
+    node->duplicates = NULL;
+    node->left = node->right = NULL;
     return node;
 }
 
-// Insert a file into BST (sorted by filename)
-BSTNode *InsertFileBts(BSTNode *root, const char *fileName, long fileSize) {
-    if (!root) return CreateBtsNode(fileName, fileSize);
-
-    int cmp = strcmp(fileName, root->FileName);
-    if (cmp < 0)
-        root->Left = InsertFileBts(root->Left, fileName, fileSize);
-    else if (cmp > 0)
-        root->Right = InsertFileBts(root->Right, fileName, fileSize);
-    else {
-        FileEntry *entry = malloc(sizeof(FileEntry));
-        entry->FileSize = fileSize;
-        entry->Next = root->Duplicates;
-        root->Duplicates = entry;
+AlbumNode *insertAlbum(AlbumNode *root, const char *artist, const char *album, int year) {
+    if (root == NULL) {
+        return createAlbumNode(artist, album, year);
     }
 
-    return root;
-}
-// Search for a file by name in BST
-BSTNode *SearchFileBts(BSTNode *root, const char *fileName) {
-    if (!root || strcmp(fileName, root->FileName) == 0) {
-        return root;
-    }
-
-    if (strcmp(fileName, root->FileName) < 0) {
-        return SearchFileBts(root->Left, fileName);
-    } else {
-        return SearchFileBts(root->Right, fileName);
-    }
-}
-
-// Find the smallest node in the BST
-BSTNode *FindMinimum(BSTNode *root) {
-    while (root && root->Left)
-        root = root->Left;
-    return root;
-}
-
-// Delete a file node from BST and maintain BST structure
-BSTNode *DeleteFileBtsNode(BSTNode *root, const char *fileName) {
-    if (!root) return NULL;
-
-    int cmp = strcmp(fileName, root->FileName);
+    int cmp = strcmp(artist, root->artist);
     if (cmp < 0) {
-        root->Left = DeleteFileBtsNode(root->Left, fileName);
+        root->left = insertAlbum(root->left, artist, album, year);
+    } else if (cmp > 0) {
+        root->right = insertAlbum(root->right, artist, album, year);
+    } else {
+        // Wenn gleicher Künstler dann als Duplikat adden
+        DuplicateAlbum *dup = createDuplicateAlbum(album, year);
+        dup->next = root->duplicates;
+        root->duplicates = dup;
     }
-    else if (cmp > 0) {
-        root->Right = DeleteFileBtsNode(root->Right, fileName);
-    }
-    else {
-        if (root->Duplicates && root->Duplicates->Next) {
-            FileEntry *temp = root->Duplicates;
-            root->Duplicates = temp->Next;
-            free(temp);
-            return root;
-        }
-
-        if (!root->Left) {
-            BSTNode *right = root->Right;
-            free(root->FileName);
-            free(root->Duplicates);
-            free(root);
-            return right;
-        } else if (!root->Right) {
-            BSTNode *left = root->Left;
-            free(root->FileName);
-            free(root->Duplicates);
-            free(root);
-            return left;
-        }
-
-        BSTNode *min = FindMinimum(root->Right);
-        free(root->FileName);
-        root->FileName = strdup(min->FileName);
-        root->Duplicates = min->Duplicates;
-        root->Right = DeleteFileBtsNode(root->Right, min->FileName);
-    }
-
     return root;
 }
 
-// Print all file entries in sorted order (inorder traversal)
-void PrintTree(BSTNode *root) {
-    if (!root) return;
+void inorderPrint(AlbumNode *root) {
+    if (root == NULL) return;
 
-    PrintTree(root->Left);
-    printf("%s: ", root->FileName);
-    FileEntry *entry = root->Duplicates;
-    while (entry) {
-        printf("%ld ", entry->FileSize);
-        entry = entry->Next;
+    inorderPrint(root->left);
+    printf("Artist: %s, Album: %s, Year: %d\n", root->artist, root->album, root->year);
+    DuplicateAlbum *dup = root->duplicates;
+    while (dup != NULL) {
+        printf("  Duplicate -> Album: %s, Year: %d\n", dup->album, dup->year);
+        dup = dup->next;
     }
-    printf("bytes\n");
-    PrintTree(root->Right);
+    inorderPrint(root->right);
 }
 
-// Free all nodes in the BST (recursive)
-void FreeTree(BSTNode *root) {
-    if (!root) return;
+void freeDuplicateList(DuplicateAlbum *dup) {
+    while (dup) {
+        DuplicateAlbum *temp = dup;
+        dup = dup->next;
+        free(temp->album);
+        free(temp);
+    }
+}
 
-    FreeTree(root->Left);
-    FreeTree(root->Right);
+void freeBST(AlbumNode *root) {
+    if (root == NULL) return;
+    freeBST(root->left);
+    freeBST(root->right);
+    free(root->artist);
+    free(root->album);
+    freeDuplicateList(root->duplicates);
+    free(root);
+}
 
-    free(root->FileName);
-    FileEntry *entry = root->Duplicates;
-    while (entry) {
-        FileEntry *next = entry->Next;
-        free(entry);
-        entry = next;
+AlbumNode *parseCsvToBst(char *fileContent) {
+    AlbumNode *root = NULL;
+    char *saveptrLine;
+    char *line = strtok_r(fileContent, "\n", &saveptrLine);  //https://www.tutorialspoint.com/c_standard_library/c_function_strtok.htm
+    int lineNumber = 0;
+
+    while (line != NULL) {
+        // Ignore Header line
+        if (lineNumber == 0) {
+            line = strtok_r(NULL, "\n", &saveptrLine);
+            lineNumber++;
+            continue;
+        }
+
+        // Use strtok_r to split the line using commas
+        char *saveptrToken;
+        char *artist = strtok_r(line, ",", &saveptrToken);
+        char *album  = strtok_r(NULL, ",", &saveptrToken);
+        char *yearStr = strtok_r(NULL, ",", &saveptrToken);
+
+        if (artist && album && yearStr) {
+            int year = (int)strtol(yearStr, NULL, 10);
+            root = insertAlbum(root, artist, album, year);
+        }
+
+        line = strtok_r(NULL, "\n", &saveptrLine);
+        lineNumber++;
     }
 
-    free(root);
+    return root;
 }

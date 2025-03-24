@@ -7,92 +7,90 @@
 
 #define STACK_MAX 1000
 
-// create new node
-ListNode *CreateListNode(const char *fileName, long fileSize) {
-    ListNode *newNode = (ListNode *)malloc(sizeof(ListNode));
-    if (!newNode) return NULL;
-
-    newNode->FileName = strdup(fileName);
-    newNode->FileSize = fileSize;
-    newNode->Prev = NULL;
-    newNode->Next = NULL;
-
-    return newNode;
+// create node for doubly linked list
+DListNode *createDListNode(const char *artist, const char *album, int year) {
+    DListNode *node = malloc(sizeof(DListNode));
+    if (!node) {
+        perror("Malloc failed");
+        exit(EXIT_FAILURE);
+    }
+    node->artist = strdup(artist);
+    node->album  = strdup(album);
+    node->year   = year;
+    node->prev   = NULL;
+    node->next   = NULL;
+    return node;
 }
 
-// insert at the beginning
-void InsertFileDll(ListNode **head, const char *fileName, long fileSize) {
-    ListNode *newNode = CreateListNode(fileName, fileSize);
-    if (!newNode) return;
-
-    if (*head) {
-        newNode->Next = *head;
-        (*head)->Prev = newNode;
+// add new node at the end
+DListNode *insertDListNode(DListNode *head, const char *artist, const char *album, int year) {
+    DListNode *newNode = createDListNode(artist, album, year);
+    if (head == NULL) {
+        return newNode;
     }
 
-    *head = newNode;
-}
+    // go to end of list
+    DListNode *tail = head;
+    while (tail->next != NULL) {
+        tail = tail->next;
+    }
 
-// remove file by name
-bool DeleteFileDll(ListNode **head, const char *fileName) {
-    if (!*head) return false;
-
-    ListNode *temp = *head;
-
-    // Find node to delete
-    while (temp && strcmp(temp->FileName, fileName) != 0)
-        temp = temp->Next;
-
-    if (!temp) return false;
-
-    // Update head if needed
-    if (temp == *head) *head = temp->Next;
-
-    // Fix links
-    if (temp->Prev) temp->Prev->Next = temp->Next;
-    if (temp->Next) temp->Next->Prev = temp->Prev;
-
-    free(temp->FileName);
-    free(temp);
-    return true;
-}
-
-// search file by name
-ListNode *SearchFile(ListNode *head, const char *fileName) {
-    while (head && strcmp(head->FileName, fileName) != 0)
-        head = head->Next;
+    tail->next = newNode;
+    newNode->prev = tail;
     return head;
 }
 
-// Print list from head to tail
-void PrintList(ListNode *head) {
-    while (head) {
-        printf("%s (%ld bytes)\n", head->FileName, head->FileSize);
-        head = head->Next;
+// print details of dlist
+void printDList(DListNode *head) {
+    DListNode *current = head;
+    while (current != NULL) {
+        printf("Artist: %s, Album: %s, Year: %d\n", current->artist, current->album, current->year);
+        current = current->next;
     }
 }
 
-// reverse print list tail to head
-void PrintListReverse(ListNode *head) {
-    if (!head) return;
-
-    // Move to tail
-    while (head->Next) head = head->Next;
-
-    // Print in reverse order
-    while (head) {
-        printf("%s (%ld bytes)\n", head->FileName, head->FileSize);
-        head = head->Prev;
-    }
-}
-
-// Free list
-void FreeList(ListNode **head) {
-    ListNode *temp;
-    while (*head) {
-        temp = *head;
-        *head = (*head)->Next;
-        free(temp->FileName);
+// free memory of list
+void freeDList(DListNode *head) {
+    DListNode *current = head;
+    while (current != NULL) {
+        DListNode *temp = current;
+        current = current->next;
+        free(temp->artist);
+        free(temp->album);
         free(temp);
     }
+}
+
+// parse csv list to doubly linked lsit
+DListNode *parseCSVToDList(char *fileContent) {
+    DListNode *head = NULL;
+    char *saveptrLine = NULL;
+    // one entry every line
+    char *line = strtok_r(fileContent, "\n", &saveptrLine);
+    int lineNumber = 0;
+
+    while (line != NULL) {
+        // ignore header line
+        if (lineNumber == 0) {
+            line = strtok_r(NULL, "\n", &saveptrLine);
+            lineNumber++;
+            continue;
+        }
+
+        // dismantle at , for Artist,Album,Year
+        char *saveptrToken;
+        char *artist = strtok_r(line, ",", &saveptrToken);
+        char *album  = strtok_r(NULL, ",", &saveptrToken);
+        char *yearStr = strtok_r(NULL, ",", &saveptrToken);
+
+        if (artist && album && yearStr) {
+            int year = (int)strtol(yearStr, NULL, 10);
+            head = insertDListNode(head, artist, album, year);
+        }
+
+        line = strtok_r(NULL, "\n", &saveptrLine);
+        lineNumber++;
+    }
+
+    return head;
 }
