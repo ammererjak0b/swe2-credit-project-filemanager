@@ -13,3 +13,16 @@
 107	201	7645456484391966	swe2_credit_project_filemanager.exe	5ca7804b74d71493
 4	80	7645457794326400	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
 80	170	7645457795091019	swe2_credit_project_filemanager.exe	5ca7804b74d71493
+23	162	7645482440776485	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/Converter.c.obj	776e81517b66bdeb
+17	167	7645482440716345	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/DoublyLinkedList.c.obj	5ea97cd38a87efe2
+10	175	7645482440649479	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/FileManager.c.obj	4ea56ab6f0571cfe
+5	95	7645484062911575	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+96	215	7645484063815158	swe2_credit_project_filemanager.exe	5ca7804b74d71493
+5	98	7645488431420464	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+5	95	7645489173534778	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+6	97	7645489922601847	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+98	195	7645489923516936	swe2_credit_project_filemanager.exe	5ca7804b74d71493
+4	175	7645495773626983	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+175	302	7645495775334576	swe2_credit_project_filemanager.exe	5ca7804b74d71493
+6	102	7645497364797904	CMakeFiles/swe2_credit_project_filemanager.dir/src/FileManager/main.c.obj	dcd557291a2b48a8
+103	205	7645497365767681	swe2_credit_project_filemanager.exe	5ca7804b74d71493

@@ -23,23 +23,61 @@ typedef enum {
 AlbumNode *root = NULL;
 DListNode *head = NULL;
 
-bool appendAlbumToCSV(const char *filename, const char *artist, const char *album, int year);
 void addAlbumToCSV(const char *filename);
-void loadBSTAndPrint(const char *filename);
-void loadDListAndPrint(const char *filename);
-void convertBSTtoDListAndPrint(const char *filename);
-void convertDListToBSTAndPrint(const char *filename);
-void printAllAlbumsDirectly(const char *filename);
+void prepareBinarySearchTree(const char *filename);
+void prepareDoublyList(const char *filename);
+void prepareConversationBstToDList(const char *filename);
+void prepareConversationDListToBst(const char *filename);
+void printAlbums(const char *filename);
 void initMenu(void);
 void test();
 
 int main(void) {
     //test();
 
+    char filePath[256] = "";
+    int choice;
 
+    printf("Please choose a file (enter file path): ");
+    scanf("%255s", filePath);
 
+    // Guard against Null in filePath
+    if (filePath == "") {
+        return EXIT_FAILURE;
+    }
 
-
+    // Menu Loop
+    while (1) {
+        initMenu();
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                addAlbumToCSV(filePath);
+                break;
+            case 2:
+                prepareBinarySearchTree(filePath);
+                break;
+            case 3:
+                prepareDoublyList(filePath);
+                break;
+            case 4:
+                prepareConversationBstToDList(filePath);
+                break;
+            case 5:
+                prepareConversationDListToBst(filePath);
+                break;
+            case 6:
+                printAlbums(filePath);
+                break;
+            case 7:
+                printf("Exiting...\n");
+            exit(0);
+                break;
+            default:
+                printf("Invalid choice, try again.\n");
+        }
+    }
+    return 0;
 }
 
 void test() {
@@ -73,7 +111,7 @@ void test() {
 }
 
 void initMenu() {
-    printf("\n===== Album Manager =====\n");
+    printf("\n----- Jakob's Album Manager -----\n");
     printf("1. Add album to CSV\n");
     printf("2. Load CSV into BST and print (inorder)\n");
     printf("3. Load CSV into Doubly Linked List and print\n");
@@ -85,25 +123,17 @@ void initMenu() {
 }
 
 void addAlbumToCSV(const char *filename) {
-    char artist[100], album[100];
-    int year;
-    int ch;
+    char artist[100] = "", album[100] = "";
+    int year = 0;
 
-    printf("Enter artist: ");
-    fgets(artist, sizeof(artist), stdin);
-    artist[strcspn(artist, "\n")] = '\0';  // remove newline
+    printf("Enter artist: \n"); // WHY DOES THIS NOT WORK AMK
+    scanf("%[^\n]", artist);
 
-    printf("Enter album: ");
-    fgets(album, sizeof(album), stdin);
-    album[strcspn(album, "\n")] = '\0';
+    printf("Enter album: \n");
+    scanf("%[^\n]", album);
 
-    printf("Enter year: ");
-    if (scanf("%d", &year) != 1) {
-        fprintf(stderr, "Invalid year input.\n");
-        while ((ch = getchar()) != '\n' && ch != EOF);
-        return;
-    }
-    while ((ch = getchar()) != '\n' && ch != EOF); // clear buffer
+    printf("Enter year: \n");
+    scanf("%d", &year);
 
     if (appendAlbum(filename, artist, album, year)) {
         printf("Album added successfully!\n");
@@ -112,7 +142,7 @@ void addAlbumToCSV(const char *filename) {
     }
 }
 
-void loadBSTAndPrint(const char *filename) {
+void prepareBinarySearchTree(const char *filename) {
     char *content = readFile(filename);
     if (!content) {
         printf("Error reading CSV file.\n");
@@ -125,7 +155,7 @@ void loadBSTAndPrint(const char *filename) {
     free(content);
 }
 
-void loadDListAndPrint(const char *filename) {
+void prepareDoublyList(const char *filename) {
     char *content = readFile(filename);
     if (!content) {
         printf("Error reading CSV file.\n");
@@ -138,7 +168,7 @@ void loadDListAndPrint(const char *filename) {
     free(content);
 }
 
-void convertBSTtoDListAndPrint(const char *filename) {
+void prepareConversationBstToDList(const char *filename) {
     char *content = readFile(filename);
     if (!content) {
         printf("Error reading CSV file.\n");
@@ -153,7 +183,7 @@ void convertBSTtoDListAndPrint(const char *filename) {
     freeDList(dlist);
 }
 
-void convertDListToBSTAndPrint(const char *filename) {
+void prepareConversationDListToBst(const char *filename) {
     char *content = readFile(filename);
     if (!content) {
         printf("Error reading CSV file.\n");
@@ -168,7 +198,7 @@ void convertDListToBSTAndPrint(const char *filename) {
     freeBST(bst);
 }
 
-void printAllAlbumsDirectly(const char *filename) {
+void printAlbums(const char *filename) {
     char *content = readFile(filename);
     if (!content) {
         printf("Error reading CSV file.\n");
@@ -179,7 +209,7 @@ void printAllAlbumsDirectly(const char *filename) {
     int lineNumber = 0;
     printf("\nAll Albums:\n");
     while (line != NULL) {
-        if (lineNumber > 0) { // skip header
+        if (lineNumber > 0) {
             char *saveptrToken;
             char *artist = strtok_r(line, ",", &saveptrToken);
             char *album  = strtok_r(NULL, ",", &saveptrToken);

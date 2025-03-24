@@ -70,10 +70,9 @@ DListNode *parseCSVToDoublyList(char *fileContent) {
     int lineNumber = 0;
 
     while (line != NULL) {
-        // ignore header line
         if (lineNumber == 0) {
             line = strtok_r(NULL, "\n", &saveptrLine);
-            lineNumber++;
+            lineNumber++;  // WARUM GEHT ER DA IMMER AUS DER SCHLEIFE ???!!!
             continue;
         }
 
