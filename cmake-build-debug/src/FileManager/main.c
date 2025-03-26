@@ -84,7 +84,7 @@ void test() {
     char *fileContent = readFile("C:\\Users\\jakob\\CLionProjects\\swe2-credit-project-filemanager\\albums.csv");
     // Guard Against Null
     if (fileContent == NULL) {
-        ferror("Error: Could not read file...\n");
+        ferror("Error: Could not read file...");
         return;
     }
 
@@ -126,12 +126,15 @@ void addAlbumToCSV(const char *filename) {
     char artist[100] = "", album[100] = "";
     int year = 0;
 
+    getchar();
     printf("Enter artist: \n"); // WHY DOES THIS NOT WORK AMK
     scanf("%[^\n]", artist);
 
+    getchar();
     printf("Enter album: \n");
     scanf("%[^\n]", album);
 
+    getchar();
     printf("Enter year: \n");
     scanf("%d", &year);
 
@@ -140,6 +143,32 @@ void addAlbumToCSV(const char *filename) {
     } else {
         printf("Error adding album.\n");
     }
+}
+
+void printAlbums(const char *filename) {
+    char *content = readFile(filename);
+    if (!content) {
+        printf("Error reading CSV file.\n");
+        return;
+    }
+    char *saveptrLine = NULL;
+    char *line = strtok_r(content, "\n", &saveptrLine);
+    int lineNumber = 0;
+    printf("\nAll Albums:\n");
+    while (line != NULL) {
+        if (lineNumber > 0) {
+            char *saveptrToken;
+            char *artist = strtok_r(line, ",", &saveptrToken);
+            char *album  = strtok_r(NULL, ",", &saveptrToken);
+            char *yearStr = strtok_r(NULL, ",", &saveptrToken);
+            if (artist && album && yearStr) {
+                printf("Artist: %s, Album: %s, Year: %s\n", artist, album, yearStr);
+            }
+        }
+        line = strtok_r(NULL, "\n", &saveptrLine);
+        lineNumber++;
+    }
+    free(content);
 }
 
 void prepareBinarySearchTree(const char *filename) {
@@ -198,28 +227,3 @@ void prepareConversationDListToBst(const char *filename) {
     freeBST(bst);
 }
 
-void printAlbums(const char *filename) {
-    char *content = readFile(filename);
-    if (!content) {
-        printf("Error reading CSV file.\n");
-        return;
-    }
-    char *saveptrLine = NULL;
-    char *line = strtok_r(content, "\n", &saveptrLine);
-    int lineNumber = 0;
-    printf("\nAll Albums:\n");
-    while (line != NULL) {
-        if (lineNumber > 0) {
-            char *saveptrToken;
-            char *artist = strtok_r(line, ",", &saveptrToken);
-            char *album  = strtok_r(NULL, ",", &saveptrToken);
-            char *yearStr = strtok_r(NULL, ",", &saveptrToken);
-            if (artist && album && yearStr) {
-                printf("Artist: %s, Album: %s, Year: %s\n", artist, album, yearStr);
-            }
-        }
-        line = strtok_r(NULL, "\n", &saveptrLine);
-        lineNumber++;
-    }
-    free(content);
-}
